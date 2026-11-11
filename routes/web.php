@@ -1,32 +1,26 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+// Halaman Beranda
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
 
-// Rute untuk Halaman Utama / Katalog Produk (Mendukung fitur pencarian)
-Route::get('/', [ProductController::class, 'index']);
+// Halaman Keranjang
+Route::get('/cart', [CartController::class, 'index'])
+    ->name('cart.index');
 
-// Rute untuk Halaman Detail Produk berdasarkan ID
-Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
+// Tambah Produk ke Keranjang
+Route::post('/cart/add', [CartController::class, 'add'])
+    ->name('cart.add');
 
-// Rute untuk Menyimpan Pesanan / Checkout dari Halaman Detail Produk
-Route::post('/product/{id}/order', [ProductController::class, 'storeOrder'])->name('product.order');
+// Update Jumlah Produk
+Route::post('/cart/update/{id}', [CartController::class, 'update'])
+    ->name('cart.update');
 
-// Rute untuk Menampilkan Riwayat Pesanan (Dashboard Admin)
-Route::get('/admin/orders', [ProductController::class, 'orderHistory'])->name('admin.orders');
-
-// Rute untuk Fitur Keranjang Belanja (Cart)
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add', [CartController::class, 'store'])->name('cart.store');
+// Hapus Produk dari Keranjang
+Route::post('/cart/remove/{id}', [CartController::class, 'remove'])
+    ->name('cart.remove');
